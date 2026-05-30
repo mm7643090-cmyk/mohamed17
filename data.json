@@ -1,0 +1,34 @@
+{
+  "cities": [
+    {
+      "id": 1,
+      "name": "طرابلس",
+      "description": "عاصمة ليبيا الجميلة"
+    },
+    {
+      "id": 2,
+      "name": "درنة",
+      "description": "لؤلؤة الساحل الليبي"
+    },
+    {
+      "id": 3,
+      "name": "صبراتة ",
+      "description": "عروس البحر"
+    }
+  ],
+  "places": [
+    {
+      "id": 1,
+      "name": "قلعة درنة التاريخية",
+      "cityId": 2,
+      "category": "تاريخي",
+      "description": "قلعة عثمانية قديمة تطل على البحر المتوسط",
+      "image": "https://via.placeholder.com/400x250/667eea/ffffff?text=قلعة+درنة",
+      "lat": 32.7647,
+      "lng": 22.6547,
+      "phone": "+218913456789",
+      "rating": 0,
+      "ratingCount": 0
+    }
+  ]
+}
