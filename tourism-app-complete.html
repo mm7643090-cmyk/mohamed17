@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق السياحة الذكي</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #38a169;
+        }
+
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+
+        .btn-info {
+            background: #4299e1;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #3182ce;
+        }
+
+        .btn-small {
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .card-title {
+            color: #667eea;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .card-description {
+            color: #555;
+            line-height: 1.6;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+
+        .badge {
+            background: #e2e8f0;
+            color: #2d3748;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .badge-category {
+            background: #667eea;
+            color: white;
+        }
+
+        .badge-city {
+            background: #48bb78;
+            color: white;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .admin-section {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #2d3748;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .search-bar {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .search-bar input {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 5px;
+        }
+
+        .search-bar select {
+            padding: 10px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 5px;
+            min-width: 150px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: #e2e8f0;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            color: #2d3748;
+        }
+
+        .close-btn:hover {
+            background: #cbd5e0;
+        }
+
+        .guides-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .guide-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .guide-info h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .guide-info p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .guide-phone {
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .maps-button {
+            background: #ff6b6b;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .maps-button:hover {
+            background: #ee5a52;
+            transform: scale(1.05);
+        }
+
+        .login-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: 50px auto;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .login-form h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #a0aec0;
+            font-size: 16px;
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .location-info {
+            background: #f7fafc;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 13px;
+            color: #4a5568;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header h1 {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .guide-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .search-bar input,
+            .search-bar select {
+                min-width: 100%;
+            }
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function TourismApp() {
+            const [page, setPage] = useState('home');
+            const [isLoggedIn, setIsLoggedIn] = useState(false);
+            const [username, setUsername] = useState('');
+            const [password, setPassword] = useState('');
+            const [searchQuery, setSearchQuery] = useState('');
+            const [selectedCity, setSelectedCity] = useState('');
+            const [selectedCategory, setSelectedCategory] = useState('');
+            const [places, setPlaces] = useState([
+                {
+                    id: 1,
+                    name: 'قلعة درنة التاريخية',
+                    city: 'درنة',
+                    category: 'تاريخي',
+                    description: 'قلعة عثمانية قديمة تطل على البحر المتوسط، تحتوي على متحف أثري',
+                    image: 'https://via.placeholder.com/300x200/667eea/ffffff?text=قلعة+درنة',
+                    lat: 32.7647,
+                    lng: 22.6547,
+                    phone: '+218913456789'
+                },
+                {
+                    id: 2,
+                    name: 'شاطئ الحامة',
+                    city: 'طرابلس',
+                    category: 'طبيعي',
+                    description: 'شاطئ جميل برمال ذهبية وماء صافي مناسب للسباحة والرياضات المائية',
+                    image: 'https://via.placeholder.com/300x200/48bb78/ffffff?text=شاطئ+الحامة',
+                    lat: 32.8872,
+                    lng: 13.1913,
+                    phone: '+218927654321'
+                },
+                {
+                    id: 3,
+                    name: 'مسجد أحمد باشا',
+                    city: 'طرابلس',
+                    category: 'ديني',
+                    description: 'مسجد تاريخي يعود إلى العصر العثماني بعمارة إسلامية فريدة',
+                    image: 'https://via.placeholder.com/300x200/4299e1/ffffff?text=مسجد+أحمد+باشا',
+                    lat: 32.8944,
+                    lng: 13.1895,
+                    phone: '+218923123456'
+                },
+                {
+                    id: 4,
+                    name: 'متحف الآثار الليبي',
+                    city: 'طرابلس',
+                    category: 'متحف',
+                    description: 'متحف يحتوي على آثار رومانية وإسلامية نادرة من جميع أنحاء ليبيا',
+                    image: 'https://via.placeholder.com/300x200/f6ad55/ffffff?text=متحف+الآثار',
+                    lat: 32.8850,
+                    lng: 13.2085,
+                    phone: '+218912456789'
+                }
+            ]);
+
+            const [guides, setGuides] = useState([
+                {
+                    id: 1,
+                    name: 'محمد السنوسي',
+                    phone: '+218913456789',
+                    specialization: 'مرشد سياحي معتمد'
+                },
+                {
+                    id: 2,
+                    name: 'فاطمة الحمودي',
+                    phone: '+218927654321',
+                    specialization: 'متخصصة في التاريخ'
+                },
+                {
+                    id: 3,
+                    name: 'علي الشريف',
+                    phone: '+218923123456',
+                    specialization: 'مرشد طبيعة وبيئة'
+                }
+            ]);
+
+            const [newPlace, setNewPlace] = useState({
+                name: '',
+                city: '',
+                category: '',
+                description: '',
+                image: '',
+                lat: '',
+                lng: '',
+                phone: ''
+            });
+
+            const cities = ['طرابلس', 'درنة', 'بنغازي', 'مصراتة', 'الزاوية'];
+            const categories = ['تاريخي', 'طبيعي', 'ديني', 'متحف', 'رياضي'];
+
+            const handleLogin = (e) => {
+                e.preventDefault();
+                if (username === 'admin' && password === 'admin123') {
+                    setIsLoggedIn(true);
+                    setPage('admin');
+                } else {
+                    alert('بيانات دخول غير صحيحة!');
+                }
+            };
+
+            const handleLogout = () => {
+                setIsLoggedIn(false);
+                setUsername('');
+                setPassword('');
+                setPage('home');
+            };
+
+            const handleAddPlace = (e) => {
+                e.preventDefault();
+                if (!newPlace.name || !newPlace.city || !newPlace.category) {
+                    alert('الرجاء ملء جميع الحقول المطلوبة');
+                    return;
+                }
+                setPlaces([...places, {
+                    ...newPlace,
+                    id: Math.max(...places.map(p => p.id), 0) + 1
+                }]);
+                setNewPlace({
+                    name: '',
+                    city: '',
+                    category: '',
+                    description: '',
+                    image: '',
+                    lat: '',
+                    lng: '',
+                    phone: ''
+                });
+                alert('تمت إضافة المكان بنجاح!');
+            };
+
+            const handleDeletePlace = (id) => {
+                if (confirm('هل أنت متأكد من حذف هذا المكان؟')) {
+                    setPlaces(places.filter(p => p.id !== id));
+                }
+            };
+
+            const filteredPlaces = places.filter(place => {
+                const matchesSearch = place.name.includes(searchQuery) || place.description.includes(searchQuery);
+                const matchesCity = !selectedCity || place.city === selectedCity;
+                const matchesCategory = !selectedCategory || place.category === selectedCategory;
+                return matchesSearch && matchesCity && matchesCategory;
+            });
+
+            const openGoogleMaps = (lat, lng, name) => {
+                const mapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(name)}/@${lat},${lng},15z`;
+                window.open(mapsUrl, '_blank');
+            };
+
+            const handlePhoneCall = (phone) => {
+                window.location.href = `tel:${phone}`;
+            };
+
+            if (!isLoggedIn && page === 'admin') {
+                return (
+                    <div className="app-container">
+                        <div className="login-form">
+                            <h2>🔐 دخول الإدارة</h2>
+                            <form onSubmit={handleLogin}>
+                                <div className="form-group">
+                                    <label>اسم المستخدم</label>
+                                    <input
+                                        type="text"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        placeholder="أدخل اسم المستخدم"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>كلمة المرور</label>
+                                    <input
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        placeholder="أدخل كلمة المرور"
+                                    />
+                                </div>
+                                <button type="submit" className="btn btn-primary" style={{width: '100%'}}>
+                                    دخول
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                );
+            }
+
+            if (isLoggedIn && page === 'admin') {
+                return (
+                    <div className="app-container">
+                        <div className="header">
+                            <h1>⚙️ لوحة تحكم الإدارة</h1>
+                            <button className="btn btn-danger" onClick={handleLogout}>
+                                تسجيل الخروج
+                            </button>
+                        </div>
+
+                        <div className="admin-section">
+                            <h2 style={{marginBottom: '20px', color: '#2d3748'}}>➕ إضافة مكان سياحي جديد</h2>
+                            <form onSubmit={handleAddPlace}>
+                                <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '15px'}}>
+                                    <div className="form-group">
+                                        <label>اسم المكان *</label>
+                                        <input
+                                            type="text"
+                                            value={newPlace.name}
+                                            onChange={(e) => setNewPlace({...newPlace, name: e.target.value})}
+                                            placeholder="اسم المكان السياحي"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>المدينة *</label>
+                                        <select
+                                            value={newPlace.city}
+                                            onChange={(e) => setNewPlace({...newPlace, city: e.target.value})}
+                                        >
+                                            <option value="">اختر مدينة</option>
+                                            {cities.map(city => (
+                                                <option key={city} value={city}>{city}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div className="form-group">
+                                        <label>الفئة *</label>
+                                        <select
+                                            value={newPlace.category}
+                                            onChange={(e) => setNewPlace({...newPlace, category: e.target.value})}
+                                        >
+                                            <option value="">اختر فئة</option>
+                                            {categories.map(cat => (
+                                                <option key={cat} value={cat}>{cat}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="form-group">
+                                    <label>الوصف</label>
+                                    <textarea
+                                        value={newPlace.description}
+                                        onChange={(e) => setNewPlace({...newPlace, description: e.target.value})}
+                                        placeholder="وصف تفصيلي للمكان"
+                                    />
+                                </div>
+
+                                <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '15px'}}>
+                                    <div className="form-group">
+                                        <label>رابط الصورة</label>
+                                        <input
+                                            type="text"
+                                            value={newPlace.image}
+                                            onChange={(e) => setNewPlace({...newPlace, image: e.target.value})}
+                                            placeholder="رابط صورة الويب"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>خط العرض (Latitude)</label>
+                                        <input
+                                            type="number"
+                                            step="0.0001"
+                                            value={newPlace.lat}
+                                            onChange={(e) => setNewPlace({...newPlace, lat: e.target.value})}
+                                            placeholder="32.8872"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>خط الطول (Longitude)</label>
+                                        <input
+                                            type="number"
+                                            step="0.0001"
+                                            value={newPlace.lng}
+                                            onChange={(e) => setNewPlace({...newPlace, lng: e.target.value})}
+                                            placeholder="13.1913"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>رقم الهاتف</label>
+                                        <input
+                                            type="tel"
+                                            value={newPlace.phone}
+                                            onChange={(e) => setNewPlace({...newPlace, phone: e.target.value})}
+                                            placeholder="+218912345678"
+                                        />
+                                    </div>
+                                </div>
+
+                                <button type="submit" className="btn btn-success" style={{width: '100%', padding: '12px'}}>
+                                    ✅ إضافة المكان
+                                </button>
+                            </form>
+                        </div>
+
+                        <div className="admin-section">
+                            <h2 style={{marginBottom: '20px', color: '#2d3748'}}>📍 الأماكن المضافة ({places.length})</h2>
+                            <div className="content">
+                                {places.map(place => (
+                                    <div key={place.id} className="card">
+                                        <div className="card-title">📌 {place.name}</div>
+                                        {place.image && <img src={place.image} alt={place.name} className="card-image" />}
+                                        <div className="card-meta">
+                                            <span className="badge badge-city">🏙️ {place.city}</span>
+                                            <span className="badge badge-category">🏷️ {place.category}</span>
+                                        </div>
+                                        <div className="card-description">{place.description}</div>
+                                        <div className="location-info">
+                                            📍 Lat: {place.lat || 'غير محدد'}, Lng: {place.lng || 'غير محدد'}
+                                        </div>
+                                        {place.phone && <div className="location-info">📞 {place.phone}</div>}
+                                        <div className="action-buttons">
+                                            <button 
+                                                className="btn btn-danger btn-small"
+                                                onClick={() => handleDeletePlace(place.id)}
+                                            >
+                                                🗑️ حذف
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="app-container">
+                    <div className="header">
+                        <h1>🌍 تطبيق السياحة الذكي</h1>
+                        <div className="nav-buttons">
+                            <button className="btn btn-primary" onClick={() => setPage('home')}>
+                                🏠 الرئيسية
+                            </button>
+                            <button className="btn btn-info" onClick={() => setPage('guides')}>
+                                👨‍🏫 المرشدون والسياح
+                            </button>
+                            <button className="btn btn-primary" onClick={() => { setPage('admin'); setIsLoggedIn(false); }}>
+                                🔐 الإدارة
+                            </button>
+                        </div>
+                    </div>
+
+                    {page === 'home' && (
+                        <>
+                            <div className="stats">
+                                <div className="stat-box">
+                                    <div className="stat-number">{places.length}</div>
+                                    <div className="stat-label">مكان سياحي</div>
+                                </div>
+                                <div className="stat-box">
+                                    <div className="stat-number">{new Set(places.map(p => p.city)).size}</div>
+                                    <div className="stat-label">مدينة</div>
+                                </div>
+                                <div className="stat-box">
+                                    <div className="stat-number">{guides.length}</div>
+                                    <div className="stat-label">مرشد سياحي</div>
+                                </div>
+                            </div>
+
+                            <div className="search-bar">
+                                <input
+                                    type="text"
+                                    placeholder="🔍 ابحث عن مكان سياحي..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+                                <select value={selectedCity} onChange={(e) => setSelectedCity(e.target.value)}>
+                                    <option value="">🏙️ جميع المدن</option>
+                                    {cities.map(city => (
+                                        <option key={city} value={city}>{city}</option>
+                                    ))}
+                                </select>
+                                <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+                                    <option value="">📂 جميع الفئات</option>
+                                    {categories.map(cat => (
+                                        <option key={cat} value={cat}>{cat}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            {filteredPlaces.length === 0 ? (
+                                <div className="card" style={{textAlign: 'center', padding: '40px'}}>
+                                    <p style={{fontSize: '18px', color: '#a0aec0'}}>
+                                        😔 لم يتم العثور على أماكن تطابق البحث
+                                    </p>
+                                </div>
+                            ) : (
+                                <div className="content">
+                                    {filteredPlaces.map(place => (
+                                        <div key={place.id} className="card">
+                                            <div className="card-title">📍 {place.name}</div>
+                                            {place.image && <img src={place.image} alt={place.name} className="card-image" />}
+                                            <div className="card-meta">
+                                                <span className="badge badge-city">🏙️ {place.city}</span>
+                                                <span className="badge badge-category">🏷️ {place.category}</span>
+                                            </div>
+                                            <div className="card-description">{place.description}</div>
+                                            <div className="action-buttons">
+                                                {place.lat && place.lng && (
+                                                    <button
+                                                        className="btn maps-button btn-small"
+                                                        onClick={() => openGoogleMaps(place.lat, place.lng, place.name)}
+                                                    >
+                                                        🗺️ خريطة جوجل
+                                                    </button>
+                                                )}
+                                                {place.phone && (
+                                                    <button
+                                                        className="btn btn-info btn-small"
+                                                        onClick={() => handlePhoneCall(place.phone)}
+                                                    >
+                                                        📞 اتصل الآن
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </>
+                    )}
+
+                    {page === 'guides' && (
+                        <>
+                            <div className="guides-section">
+                                <h2 style={{marginBottom: '20px', color: '#2d3748', fontSize: '22px'}}>
+                                    👨‍🏫 المرشدون والسياح المعتمدون
+                                </h2>
+                                <p style={{color: '#718096', marginBottom: '20px'}}>
+                                    تواصل مباشرة مع المرشدين السياحيين المحترفين للحصول على جولة تفصيلية
+                                </p>
+                                {guides.map(guide => (
+                                    <div key={guide.id} className="guide-card">
+                                        <div className="guide-info">
+                                            <h3>👤 {guide.name}</h3>
+                                            <p>🎯 {guide.specialization}</p>
+                                        </div>
+                                        <div className="guide-phone">
+                                            <button
+                                                className="btn btn-success btn-small"
+                                                onClick={() => handlePhoneCall(guide.phone)}
+                                                style={{backgroundColor: '#48bb78'}}
+                                            >
+                                                📞 {guide.phone}
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="guides-section" style={{background: '#edf2f7', border: '2px dashed #cbd5e0'}}>
+                                <h3 style={{color: '#2d3748', marginBottom: '10px'}}>💡 نصيحة</h3>
+                                <p style={{color: '#4a5568'}}>
+                                    يمكنك الاتصال بأحد المرشدين مباشرة لحجز جولة سياحية مخصصة تناسب احتياجاتك وميزانيتك
+                                </p>
+                            </div>
+                        </>
+                    )}
+                </div>
+            );
+        }
+
+        ReactDOM.render(<TourismApp />, document.getElementById('root'));
+    </script>
+</body>
+</html>
