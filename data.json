@@ -34,6 +34,17 @@
       "phone": "+218913456789",
       "rating": 2,
       "ratingCount": 1
+    },
+    {
+      "name": "مسجد العتيق ",
+      "cityId": 3,
+      "category": "ديني",
+      "description": "اقدم مسجد في مدينة صبراتة ",
+      "image": "https://www.google.com/imgres?q=%D9%85%D8%B3%D8%AC%D8%AF%20%D8%A7%D9%84%D8%B9%D8%AA%D9%8A%D9%82%20%D8%B5%D8%A8%D8%B1%D8%A7%D8%AA%D8%A9&imgurl=https%3A%2F%2Flookaside.fbsbx.com%2Flookaside%2Fcrawler%2Fmedia%2F%3Fmedia_id%3D1627073711233433&imgrefurl=https%3A%2F%2Fwww.facebook.com%2Fgroups%2F999247953471913%2Fposts%2F9457929670936990%2F&docid=ImlrZ-WDBHep-M&tbnid=cs8ocO02_DlKsM&vet=12ahUKEwjy_eGvsuuUAxUHUaQEHaRCDikQnPAOegQIExAB..i&w=540&h=350&hcb=2&ved=2ahUKEwjy_eGvsuuUAxUHUaQEHaRCDikQnPAOegQIExAB",
+      "lat": "",
+      "lng": "",
+      "phone": "",
+      "id": 2
     }
   ]
 }
