@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل ليبيا السياحي - Python Flask</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p1CmV8Yv5tq3QyA0HjvYV0kF9B0L6Hs3RXv2yv7065uDlxoN1QOZ3f7vOef6UnJ6W5Xs8NH8TYQPB3A8p2Hf5Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #0f4c81;
+            --secondary: #1d9bf0;
+            --accent: #38bdf8;
+            --success: #48bb78;
+            --danger: #f56565;
+            --info: #4299e1;
+            --light: #f7fafc;
+            --dark: #2d3748;
+            --text: #2d3748;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, var(--primary), var(--secondary)); min-height: 100vh; color: var(--text); }
+        .container { width: min(1200px, 95%); margin: 0 auto; padding: 20px 0; }
+        .header { background: white; border-radius: 18px; padding: 28px; box-shadow: 0 20px 55px rgba(0,0,0,0.12); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; align-items: center; margin-bottom: 24px; }
+        .title-box { display: flex; align-items: center; gap: 14px; }
+        .title-box h1 { font-size: 32px; font-weight: 800; letter-spacing: 1px; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header .badge { background: var(--info); color: white; padding: 10px 16px; border-radius: 12px; font-weight: 700; }
+        .search-panel { background: rgba(255,255,255,0.95); border-radius: 18px; padding: 22px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; align-items: center; }
+        .search-panel input, .search-panel select { width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 14px; }
+        .search-panel button { padding: 14px 18px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: white; border-radius: 18px; padding: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.08); text-align: center; }
+        .stat-card h2 { color: var(--primary); font-size: 36px; margin-bottom: 8px; }
+        .stat-card p { color: #4a5568; }
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+        .place-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.12); transition: transform 0.25s ease, box-shadow 0.25s ease; }
+        .place-card:hover { transform: translateY(-8px); box-shadow: 0 25px 70px rgba(0,0,0,0.16); }
+        .place-card img { width: 100%; height: 260px; object-fit: cover; }
+        .place-card .card-body { padding: 22px; }
+        .place-card .card-body h3 { font-size: 22px; margin-bottom: 10px; }
+        .place-card .place-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+        .place-card .meta-badge { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 8px 14px; border-radius: 999px; font-size: 13px; }
+        .place-card .place-desc { color: #4a5568; line-height: 1.75; margin-bottom: 16px; }
+        .place-card .place-extra { display: grid; gap: 10px; margin-bottom: 16px; }
+        .place-card .place-extra div { display: flex; gap: 10px; align-items: center; color: #4a5568; font-size: 14px; }
+        .place-card .place-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+        .btn { border: none; border-radius: 12px; cursor: pointer; font-weight: 700; padding: 12px 16px; transition: transform 0.2s ease; }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
+        .btn-success { background: linear-gradient(135deg, var(--success), #2f855a); color: white; }
+        .btn-info { background: linear-gradient(135deg, var(--info), #2563eb); color: white; }
+        .alert { padding: 18px 20px; border-radius: 16px; margin-bottom: 20px; font-weight: 600; }
+        .alert-success { background: rgba(72,187,120,0.12); color: #234e31; }
+        .alert-danger { background: rgba(245,101,101,0.12); color: #7b2f2f; }
+        .alert-info { background: rgba(66,153,225,0.12); color: #1e4b8b; }
+        .login-link { color: var(--primary); text-decoration: none; font-weight: 700; }
+        @media (max-width: 900px) { .header { flex-direction: column; align-items: flex-start; } .cards-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title-box">
+                <div style="font-size:40px;">🌍</div>
+                <div>
+                    <h1>دليل ليبيا السياحي</h1>
+                    <p style="color:#4a5568; margin-top:8px;">استكشف المدن والأماكن السياحية داخل ليبيا بسهولة.</p>
+                </div>
+            </div>
+            <a href="{{ url_for('login') }}" class="btn btn-primary">🔐 دخول الإدارة</a>
+        </div>
+
+        <div class="search-panel">
+            <form method="get" action="{{ url_for('home') }}" style="display:flex; gap:12px; flex-wrap:wrap; width:100%;">
+                <input type="text" name="search" placeholder="ابحث عن مكان..." value="{{ search_query }}" />
+                <select name="city_id">
+                    <option value="">جميع المدن</option>
+                    {% for city in cities %}
+                        <option value="{{ city.id }}" {% if selected_city == str(city.id) %}selected{% endif %}>{{ city.name }}</option>
+                    {% endfor %}
+                </select>
+                <select name="category">
+                    <option value="">جميع الفئات</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-info">بحث</button>
+            </form>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h2>{{ cities|length }}</h2>
+                <p>مدن سياحية</p>
+            </div>
+            <div class="stat-card">
+                <h2>{{ total_places }}</h2>
+                <p>أماكن معروضة</p>
+            </div>
+            <div class="stat-card">
+                <h2>{{ selected_category or 'الكل' }}</h2>
+                <p>الفئة المحددة</p>
+            </div>
+        </div>
+
+        <div class="cards-grid">
+            {% if places %}
+                {% for place in places %}
+                    <div class="place-card">
+                        <img src="{{ place.image or 'https://via.placeholder.com/600x360/667eea/ffffff?text=بدون+صورة' }}" alt="{{ place.name }}" />
+                        <div class="card-body">
+                            <h3>{{ place.name }}</h3>
+                            <div class="place-meta">
+                                <span class="meta-badge">{{ place.city_name }}</span>
+                                <span class="meta-badge">{{ place.category }}</span>
+                            </div>
+                            <p class="place-desc">{{ place.description or 'لا يوجد وصف متاح.' }}</p>
+                            <div class="place-extra">
+                                {% if place.lat and place.lng %}
+                                    <div><i class="fa-solid fa-location-dot"></i> {{ place.lat }}, {{ place.lng }}</div>
+                                {% endif %}
+                                {% if place.phone %}
+                                    <div><i class="fa-solid fa-phone"></i> {{ place.phone }}</div>
+                                {% endif %}
+                                <div><i class="fa-solid fa-star"></i> {{ place.rating or 0 }} / 5 ({{ place.rating_count or 0 }} تقييم)</div>
+                            </div>
+                            <div class="place-actions">
+                                {% if place.lat and place.lng %}
+                                    <a href="https://www.google.com/maps/search/{{ place.name | url_encode }}/@{{ place.lat }},{{ place.lng }},15z" target="_blank" class="btn btn-success">🗺️ خريطة جوجل</a>
+                                {% endif %}
+                                {% if place.phone %}
+                                    <a href="tel:{{ place.phone }}" class="btn btn-info">📞 اتصل الآن</a>
+                                {% endif %}
+                                <form method="post" action="{{ url_for('rate_place') }}" style="display:inline-flex; gap:10px; flex-wrap:wrap; margin-top:12px; width:100%;">
+                                    <input type="hidden" name="place_id" value="{{ place.id }}" />
+                                    <select name="rating" class="btn btn-primary" style="border-radius: 12px; padding: 12px 16px; width: auto;">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-success">⭐ تقييم</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="stat-card" style="grid-column: 1 / -1; background: rgba(255,255,255,0.95);">
+                    <h2>لا توجد أماكن</h2>
+                    <p>حاول تغيير المعايير أو أضف مكان جديد من صفحة الإدارة.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

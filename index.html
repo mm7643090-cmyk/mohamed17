@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيق السياحة الذكي - Tourism Smart App</title>
+    <title>دليل ليبيا السياحي - Libya Travel Guide</title>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -15,9 +15,9 @@
         }
 
         :root {
-            --primary: #667eea;
-            --secondary: #764ba2;
-            --accent: #f093fb;
+            --primary: #0f4c81;
+            --secondary: #1d9bf0;
+            --accent: #38bdf8;
             --success: #48bb78;
             --danger: #f56565;
             --info: #4299e1;
@@ -37,7 +37,6 @@
             margin: 0 auto;
         }
 
-        /* Header */
         .header {
             background: white;
             padding: 25px;
@@ -107,7 +106,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
-        /* Main Content */
         .content {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -167,10 +165,18 @@
 
         .card-image {
             width: 100%;
-            height: 200px;
+            height: 260px;
             object-fit: cover;
-            border-radius: 10px;
-            margin: 15px 0;
+            border-radius: 12px;
+            margin: 18px 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: #f7fafc;
+        }
+
+        .card-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.18);
         }
 
         .card-text {
@@ -196,7 +202,6 @@
             font-weight: 600;
         }
 
-        /* Forms */
         .form-section {
             background: white;
             border-radius: 15px;
@@ -259,7 +264,6 @@
             min-height: 100px;
         }
 
-        /* Buttons */
         .btn {
             padding: 12px 24px;
             border: none;
@@ -320,7 +324,6 @@
             margin-top: 15px;
         }
 
-        /* Search Bar */
         .search-bar {
             background: white;
             padding: 20px;
@@ -350,7 +353,6 @@
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        /* Stats */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -379,7 +381,6 @@
             margin-top: 8px;
         }
 
-        /* Login */
         .login-container {
             display: flex;
             justify-content: center;
@@ -404,7 +405,6 @@
             font-size: 24px;
         }
 
-        /* Tables */
         .table-responsive {
             overflow-x: auto;
         }
@@ -437,7 +437,6 @@
             background: var(--light);
         }
 
-        /* Location Info */
         .location-info {
             background: linear-gradient(135deg, #f0f4ff, #f5f0ff);
             padding: 12px;
@@ -448,7 +447,6 @@
             border-left: 4px solid var(--primary);
         }
 
-        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
@@ -461,7 +459,77 @@
             opacity: 0.5;
         }
 
-        /* Responsive */
+        .rating-container {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid var(--info);
+        }
+
+        .rating-display {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .stars {
+            display: flex;
+            gap: 4px;
+        }
+
+        .star {
+            font-size: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .star:hover {
+            transform: scale(1.2);
+        }
+
+        .rating-label {
+            color: #4a5568;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .avg-rating {
+            background: linear-gradient(135deg, var(--info), #2c5aa0);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .save-ratings-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, var(--success), #38a169);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(72, 187, 120, 0.4);
+            z-index: 1000;
+            animation: pulse 2s infinite;
+        }
+
+        .save-ratings-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.6);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 5px 20px rgba(72, 187, 120, 0.4); }
+            50% { box-shadow: 0 5px 20px rgba(72, 187, 120, 0.8); }
+        }
+
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
@@ -506,32 +574,11 @@
             const [page, setPage] = useState('home');
             const [isLoggedIn, setIsLoggedIn] = useState(false);
             const [loginData, setLoginData] = useState({ username: '', password: '' });
-
-            // States
-            const [cities, setCities] = useState([
-                { id: 1, name: 'طرابلس', description: 'عاصمة ليبيا الجميلة' },
-                { id: 2, name: 'درنة', description: 'لؤلؤة الساحل الليبي' }
-            ]);
-
-            const [places, setPlaces] = useState([
-                {
-                    id: 1,
-                    name: 'قلعة درنة التاريخية',
-                    cityId: 2,
-                    category: 'تاريخي',
-                    description: 'قلعة عثمانية قديمة تطل على البحر المتوسط',
-                    image: 'https://via.placeholder.com/400x250/667eea/ffffff?text=قلعة+درنة',
-                    lat: 32.7647,
-                    lng: 22.6547,
-                    phone: '+218913456789'
-                }
-            ]);
-
+            const [cities, setCities] = useState([]);
+            const [places, setPlaces] = useState([]);
             const [searchQuery, setSearchQuery] = useState('');
             const [selectedCity, setSelectedCity] = useState('');
             const [selectedCategory, setSelectedCategory] = useState('');
-
-            // New City/Place Forms
             const [newCity, setNewCity] = useState({ name: '', description: '' });
             const [newPlace, setNewPlace] = useState({
                 name: '',
@@ -543,10 +590,78 @@
                 lng: '',
                 phone: ''
             });
+            const [tempRatings, setTempRatings] = useState({});
+            const [hasRatingChanges, setHasRatingChanges] = useState(false);
+            const [unsavedChanges, setUnsavedChanges] = useState(false);
 
             const categories = ['تاريخي', 'طبيعي', 'ديني', 'متحف', 'رياضي', 'تسوق', 'ترفيهي'];
 
-            // Handlers
+            useEffect(() => {
+                fetch('/api/data')
+                    .then(res => res.json())
+                    .then(data => {
+                        setCities(data.cities || []);
+                        setPlaces(data.places || []);
+                    })
+                    .catch(() => {
+                        alert('لم أتمكن من تحميل البيانات من الخادم.');
+                    });
+            }, []);
+
+            const saveData = (updatedCities, updatedPlaces) => {
+                fetch('/api/data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cities: updatedCities, places: updatedPlaces })
+                })
+                    .then(res => res.json())
+                    .then(() => {
+                        setCities(updatedCities);
+                        setPlaces(updatedPlaces);
+                        setUnsavedChanges(false);
+                        setHasRatingChanges(false);
+                        setTempRatings({});
+                        alert('✅ تم حفظ جميع التعديلات بنجاح!');
+                    })
+                    .catch(() => {
+                        alert('حدث خطأ أثناء حفظ البيانات.');
+                    });
+            };
+
+            const handleRatingChange = (placeId, rating) => {
+                setTempRatings({
+                    ...tempRatings,
+                    [placeId]: rating
+                });
+                setHasRatingChanges(true);
+                setUnsavedChanges(true);
+            };
+
+            const applyPendingRatings = (currentPlaces) => {
+                return currentPlaces.map(place => {
+                    if (tempRatings[place.id] !== undefined) {
+                        const newRating = tempRatings[place.id];
+                        const currentRating = place.rating || 0;
+                        const currentCount = place.ratingCount || 0;
+                        const totalRating = (currentRating * currentCount) + newRating;
+                        const newCount = currentCount + 1;
+                        const newAverage = totalRating / newCount;
+
+                        return {
+                            ...place,
+                            rating: Math.round(newAverage * 10) / 10,
+                            ratingCount: newCount
+                        };
+                    }
+                    return place;
+                });
+            };
+
+            const handleSaveAll = () => {
+                const updatedPlaces = applyPendingRatings(places);
+                saveData(cities, updatedPlaces);
+            };
+
             const handleLogin = (e) => {
                 e.preventDefault();
                 if (loginData.username === 'admin' && loginData.password === 'admin123') {
@@ -563,13 +678,15 @@
                     alert('أدخل اسم المدينة');
                     return;
                 }
-                setCities([...cities, {
+                const updatedCities = [...cities, {
                     id: Math.max(...cities.map(c => c.id), 0) + 1,
                     name: newCity.name,
                     description: newCity.description
-                }]);
+                }];
+                setCities(updatedCities);
                 setNewCity({ name: '', description: '' });
-                alert('✅ تمت إضافة المدينة بنجاح!');
+                setUnsavedChanges(true);
+                alert('✅ تمت إضافة المدينة محلياً. اضغط حفظ لحفظ التغييرات.');
             };
 
             const handleAddPlace = (e) => {
@@ -578,13 +695,14 @@
                     alert('⚠️ أدخل جميع المعلومات المطلوبة');
                     return;
                 }
-                setPlaces([...places, {
+                const updatedPlaces = [...places, {
                     ...newPlace,
                     id: Math.max(...places.map(p => p.id), 0) + 1,
                     cityId: parseInt(newPlace.cityId),
-                    lat: parseFloat(newPlace.lat) || '',
-                    lng: parseFloat(newPlace.lng) || ''
-                }]);
+                    lat: newPlace.lat ? parseFloat(newPlace.lat) : '',
+                    lng: newPlace.lng ? parseFloat(newPlace.lng) : ''
+                }];
+                setPlaces(updatedPlaces);
                 setNewPlace({
                     name: '',
                     cityId: '',
@@ -595,27 +713,31 @@
                     lng: '',
                     phone: ''
                 });
-                alert('✅ تمت إضافة المكان بنجاح!');
+                setUnsavedChanges(true);
+                alert('✅ تمت إضافة المكان محلياً. اضغط حفظ لحفظ التغييرات.');
             };
 
             const handleDeleteCity = (id) => {
                 if (confirm('⚠️ هل أنت متأكد من حذف المدينة؟')) {
-                    setCities(cities.filter(c => c.id !== id));
-                    setPlaces(places.filter(p => p.cityId !== id));
-                    alert('✅ تم الحذف بنجاح');
+                    const updatedCities = cities.filter(c => c.id !== id);
+                    const updatedPlaces = places.filter(p => p.cityId !== id);
+                    setCities(updatedCities);
+                    setPlaces(updatedPlaces);
+                    setUnsavedChanges(true);
+                    alert('✅ تم حذف المدينة محلياً. اضغط حفظ لحفظ التغييرات.');
                 }
             };
 
             const handleDeletePlace = (id) => {
                 if (confirm('⚠️ هل أنت متأكد من حذف المكان؟')) {
-                    setPlaces(places.filter(p => p.id !== id));
-                    alert('✅ تم الحذف بنجاح');
+                    const updatedPlaces = places.filter(p => p.id !== id);
+                    setPlaces(updatedPlaces);
+                    setUnsavedChanges(true);
+                    alert('✅ تم حذف المكان محلياً. اضغط حفظ لحفظ التغييرات.');
                 }
             };
 
-            const getCityName = (cityId) => {
-                return cities.find(c => c.id === cityId)?.name || 'غير معروفة';
-            };
+            const getCityName = (cityId) => cities.find(c => c.id === cityId)?.name || 'غير معروفة';
 
             const filteredPlaces = places.filter(place => {
                 const matchSearch = place.name.includes(searchQuery) || place.description.includes(searchQuery);
@@ -664,11 +786,10 @@
 
             return (
                 <div className="app-wrapper">
-                    {/* Header */}
                     <div className="header">
                         <div className="header-title">
                             <span className="logo-icon">🌍</span>
-                            <h1>تطبيق السياحة الذكي</h1>
+                            <h1>دليل ليبيا السياحي</h1>
                         </div>
                         <div className="nav-tabs">
                             {isLoggedIn && (
@@ -692,10 +813,8 @@
                         </div>
                     </div>
 
-                    {/* Home Page */}
                     {page === 'home' && (
                         <>
-                            {/* Stats */}
                             <div className="stats-grid">
                                 <div className="stat-card">
                                     <div className="stat-number">{cities.length}</div>
@@ -711,7 +830,6 @@
                                 </div>
                             </div>
 
-                            {/* Search */}
                             <div className="search-bar">
                                 <input
                                     type="text"
@@ -733,7 +851,6 @@
                                 </select>
                             </div>
 
-                            {/* Places Grid */}
                             {filteredPlaces.length === 0 ? (
                                 <div className="card" style={{textAlign: 'center', padding: '40px'}}>
                                     <div className="empty-icon">😔</div>
@@ -760,6 +877,34 @@
                                                     📍 {place.lat.toFixed(4)}, {place.lng.toFixed(4)}
                                                 </div>
                                             )}
+                                            
+                                            <div className="rating-container">
+                                                <div className="rating-display">
+                                                    <div>
+                                                        <div className="rating-label">⭐ التقييم ({place.ratingCount || 0} تقييم)</div>
+                                                        <div className="avg-rating">
+                                                            {place.rating ? `${place.rating}/5` : 'لا توجد تقييمات'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="rating-label">أضف تقييمك:</div>
+                                                <div className="stars">
+                                                    {[1, 2, 3, 4, 5].map(star => (
+                                                        <span
+                                                            key={star}
+                                                            className="star"
+                                                            onClick={() => handleRatingChange(place.id, star)}
+                                                            style={{
+                                                                opacity: (tempRatings[place.id] || 0) >= star ? 1 : 0.3,
+                                                                color: (tempRatings[place.id] || 0) >= star ? '#ffc107' : '#d0d0d0'
+                                                            }}
+                                                        >
+                                                            ⭐
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+
                                             <div className="button-group">
                                                 {place.lat && place.lng && (
                                                     <button
@@ -785,10 +930,8 @@
                         </>
                     )}
 
-                    {/* Admin Page */}
                     {page === 'admin' && isLoggedIn && (
                         <>
-                            {/* Cities Management */}
                             <div className="form-section">
                                 <div className="form-title">🏙️ إدارة المدن</div>
                                 <form onSubmit={handleAddCity}>
@@ -799,7 +942,7 @@
                                                 type="text"
                                                 value={newCity.name}
                                                 onChange={(e) => setNewCity({...newCity, name: e.target.value})}
-                                                placeholder="مثال: الإسكندرية"
+                                                placeholder="مثال: طرابلس"
                                                 required
                                             />
                                         </div>
@@ -818,7 +961,6 @@
                                     </button>
                                 </form>
 
-                                {/* Cities List */}
                                 <div className="table-responsive">
                                     <table className="table">
                                         <thead>
@@ -850,7 +992,6 @@
                                 </div>
                             </div>
 
-                            {/* Places Management */}
                             <div className="form-section">
                                 <div className="form-title">📍 إضافة أماكن سياحية</div>
                                 <form onSubmit={handleAddPlace}>
@@ -945,7 +1086,6 @@
                                     </button>
                                 </form>
 
-                                {/* Places List */}
                                 <div className="table-responsive">
                                     <table className="table">
                                         <thead>
@@ -977,6 +1117,15 @@
                                 </div>
                             </div>
                         </>
+                    )}
+
+                    {(unsavedChanges || hasRatingChanges) && (
+                        <button 
+                            className="save-ratings-btn"
+                            onClick={handleSaveAll}
+                        >
+                            💾 حفظ التعديلات {Object.keys(tempRatings).length > 0 ? `(${Object.keys(tempRatings).length})` : ''}
+                        </button>
                     )}
                 </div>
             );

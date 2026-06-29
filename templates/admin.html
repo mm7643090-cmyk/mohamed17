@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة الإدارة - دليل ليبيا السياحي</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7ff; color: #2d3748; }
+        .container { width: min(1200px, 95%); margin: 20px auto; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; background: white; padding: 22px 28px; border-radius: 18px; box-shadow: 0 18px 50px rgba(0,0,0,0.08); margin-bottom: 24px; }
+        .topbar h1 { font-size: 28px; }
+        .btn { border: none; border-radius: 14px; cursor: pointer; padding: 12px 18px; font-weight: 700; }
+        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .btn-danger { background: linear-gradient(135deg, #f56565, #c53030); color: white; }
+        .panel { background: white; border-radius: 20px; padding: 24px; box-shadow: 0 18px 60px rgba(0,0,0,0.08); margin-bottom: 24px; }
+        .panel h2 { font-size: 22px; margin-bottom: 18px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-bottom: 18px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-group label { font-size: 14px; font-weight: 700; }
+        .form-group input, .form-group select, .form-group textarea { padding: 14px 16px; border-radius: 14px; border: 2px solid #e2e8f0; }
+        .form-group textarea { resize: vertical; min-height: 120px; }
+        .table-wrapper { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+        th, td { padding: 14px 16px; border-bottom: 1px solid #e2e8f0; text-align: right; }
+        th { background: #f7fafc; font-weight: 700; }
+        tr:hover { background: #f7fafc; }
+        .action-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+        .alert { padding: 16px 18px; border-radius: 16px; margin-bottom: 18px; font-weight: 700; }
+        .alert-success { background: rgba(72,187,120,0.12); color: #234e31; }
+        .alert-danger { background: rgba(245,101,101,0.12); color: #7b2f2f; }
+        @media (max-width: 900px) { .topbar, .panel { padding: 18px; } .topbar { flex-direction: column; align-items: flex-start; gap: 16px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="topbar">
+            <h1>لوحة الإدارة</h1>
+            <div class="action-buttons">
+                <a href="{{ url_for('home') }}" class="btn btn-primary">الواجهة</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-danger">خروج</a>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="panel">
+            <h2>إضافة مدينة جديدة</h2>
+            <form method="post" action="{{ url_for('add_city') }}">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>اسم المدينة</label>
+                        <input type="text" name="name" required placeholder="مثال: بنغازي">
+                    </div>
+                    <div class="form-group">
+                        <label>وصف المدينة</label>
+                        <textarea name="description" placeholder="وصف موجز عن المدينة"></textarea>
+                    </div>
+                </div>
+                <button class="btn btn-primary">➕ إضافة مدينة</button>
+            </form>
+        </div>
+
+        <div class="panel">
+            <h2>إضافة مكان سياحي جديد</h2>
+            <form method="post" action="{{ url_for('add_place') }}">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>اسم المكان</label>
+                        <input type="text" name="name" required placeholder="مثال: الهرم الأكبر">
+                    </div>
+                    <div class="form-group">
+                        <label>المدينة</label>
+                        <select name="city_id" required>
+                            <option value="">اختر المدينة</option>
+                            {% for city in cities %}
+                                <option value="{{ city.id }}">{{ city.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>الفئة</label>
+                        <select name="category" required>
+                            <option value="">اختر الفئة</option>
+                            {% for cat in categories %}
+                                <option value="{{ cat }}">{{ cat }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>رابط الصورة</label>
+                        <input type="text" name="image" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label>خط العرض</label>
+                        <input type="text" name="lat" placeholder="مثال: 32.8872">
+                    </div>
+                    <div class="form-group">
+                        <label>خط الطول</label>
+                        <input type="text" name="lng" placeholder="مثال: 13.1913">
+                    </div>
+                    <div class="form-group">
+                        <label>رقم الهاتف</label>
+                        <input type="text" name="phone" placeholder="مثال: +218912345678">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>وصف المكان</label>
+                    <textarea name="description" placeholder="وصف كامل للمكان"></textarea>
+                </div>
+                <button class="btn btn-primary">➕ إضافة المكان</button>
+            </form>
+        </div>
+
+        <div class="panel">
+            <h2>قائمة المدن</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>المدينة</th>
+                            <th>الوصف</th>
+                            <th>عدد الأماكن</th>
+                            <th>إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for city in cities %}
+                            <tr>
+                                <td>{{ city.name }}</td>
+                                <td>{{ city.description or '-' }}</td>
+                                <td>{{ places | selectattr('city_id', 'equalto', city.id) | list | length }}</td>
+                                <td>
+                                    <form method="post" action="{{ url_for('delete_city', city_id=city.id) }}" style="display:inline;">
+                                        <button class="btn btn-danger" type="submit">حذف</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>قائمة الأماكن</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>المكان</th>
+                            <th>المدينة</th>
+                            <th>الفئة</th>
+                            <th>التقييم</th>
+                            <th>إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for place in places %}
+                            <tr>
+                                <td>{{ place.name }}</td>
+                                <td>{{ place.city_name }}</td>
+                                <td>{{ place.category }}</td>
+                                <td>{{ place.rating or 0 }} / 5</td>
+                                <td>
+                                    <form method="post" action="{{ url_for('delete_place', place_id=place.id) }}" style="display:inline;">
+                                        <button class="btn btn-danger" type="submit">حذف</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

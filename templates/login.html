@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دخول الإدارة - دليل ليبيا السياحي</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea, #764ba2); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .login-card { background: white; border-radius: 22px; padding: 32px; width: min(420px, 100%); box-shadow: 0 25px 80px rgba(0,0,0,0.18); }
+        .login-card h2 { color: #3c366b; margin-bottom: 18px; }
+        .login-card label { display: block; margin-bottom: 8px; color: #4a5568; font-weight: 600; }
+        .login-card input { width: 100%; padding: 14px 16px; margin-bottom: 18px; border: 2px solid #e2e8f0; border-radius: 14px; }
+        .login-card button { width: 100%; padding: 14px 16px; border: none; border-radius: 14px; font-weight: 700; background: linear-gradient(135deg, #667eea, #764ba2); color: white; cursor: pointer; }
+        .alert { padding: 14px 16px; border-radius: 14px; margin-bottom: 18px; font-weight: 600; }
+        .alert-danger { background: rgba(245,101,101,0.12); color: #7b2f2f; }
+        .back-link { display: block; margin-top: 14px; text-align: center; color: #667eea; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h2>🔐 تسجيل الدخول للإدارة</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form method="post" action="{{ url_for('login') }}">
+            <label>اسم المستخدم</label>
+            <input type="text" name="username" placeholder="admin" required>
+            <label>كلمة المرور</label>
+            <input type="password" name="password" placeholder="admin123" required>
+            <button type="submit">دخول</button>
+        </form>
+        <a href="{{ url_for('home') }}" class="back-link">العودة للواجهة</a>
+    </div>
+</body>
+</html>
