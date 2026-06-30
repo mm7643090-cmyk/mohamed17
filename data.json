@@ -1,32 +1,54 @@
 {
   "cities": [
     {
+      "id": 1,
+      "name": "طرابلس ",
+      "description": " العاصمة السياسية والاقتصادية، وتُعرف بـ \"عروس البحر المتوسط\". تجمع بين الحداثة وعبق التاريخ"
+    },
+    {
       "id": 2,
-      "name": "درنة",
-      "description": "لؤلؤة الساحل الليبي"
+      "name": "صبراتة",
+      "description": "عروس البحر "
     },
     {
       "id": 3,
-      "name": "صبراتة ",
-      "description": "عروس البحر"
-    },
-    {
-      "id": 4,
-      "name": "صرمان",
-      "description": ""
+      "name": "شحات ",
+      "description": "تعد مدينة شحات (قورينا) في الجبل الأخضر شرق ليبيا، إحدى أهم المدن الأثرية المسجلة في قائمة التراث العالمي."
     }
   ],
   "places": [
     {
-      "name": "مسجد العتيق ",
+      "name": "أثار صبراتة ",
+      "cityId": 2,
+      "category": "تاريخي",
+      "description": "اثار رومانية تتميز بوقعها الجميل الذي يجمع بين الاثار والساحل المطل عالبحر المتوسط ",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcaTQpm1x3rf4SiOCJQ0X9queDi7nKUHjzgms3CgmXKg&s=10",
+      "lat": 32.80528,
+      "lng": 12.485,
+      "phone": "",
+      "id": 1
+    },
+    {
+      "name": "اثار شحات ",
       "cityId": 3,
-      "category": "ديني",
-      "description": "اقدم مسجد في مدينة صبراتة ",
-      "image": "https://www.google.com/imgres?q=%D9%85%D8%B3%D8%AC%D8%AF%20%D8%A7%D9%84%D8%B9%D8%AA%D9%8A%D9%82%20%D8%B5%D8%A8%D8%B1%D8%A7%D8%AA%D8%A9&imgurl=https%3A%2F%2Flookaside.fbsbx.com%2Flookaside%2Fcrawler%2Fmedia%2F%3Fmedia_id%3D1627073711233433&imgrefurl=https%3A%2F%2Fwww.facebook.com%2Fgroups%2F999247953471913%2Fposts%2F9457929670936990%2F&docid=ImlrZ-WDBHep-M&tbnid=cs8ocO02_DlKsM&vet=12ahUKEwjy_eGvsuuUAxUHUaQEHaRCDikQnPAOegQIExAB..i&w=540&h=350&hcb=2&ved=2ahUKEwjy_eGvsuuUAxUHUaQEHaRCDikQnPAOegQIExAB",
-      "lat": "",
-      "lng": "",
+      "category": "تاريخي",
+      "description": "أحد أهم مواقع التراث العالمي المدرجة في اليونسكو",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQptIAXUkvbfkgIiGpQioydn-JXfkH22lGS9Uw22snEFA&s=10",
+      "lat": 32.8034,
+      "lng": 21.8628,
       "phone": "",
       "id": 2
+    },
+    {
+      "name": "مسجد العتيق صبراتة ",
+      "cityId": 2,
+      "category": "ديني",
+      "description": "اقدم مسجد في صبراتة تم ترميمه وتوسيعه بشكل كامل يقع في وسط المدينة ",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmtdvXl3UctVY1-5XH5CGTANnZvQ2MI6-qih6Bio5EPw&s=10",
+      "lat": 32.75757,
+      "lng": 12.49943,
+      "phone": "",
+      "id": 3
     }
   ]
 }
